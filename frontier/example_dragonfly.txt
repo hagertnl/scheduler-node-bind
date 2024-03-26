@@ -1,0 +1,16 @@
+frontier00001 NIC 0 macaddr 02:00:00:00:30:72 logaddr 03102 location 006.01.14
+frontier00001 NIC 1 macaddr 02:00:00:00:30:73 logaddr 03103 location 006.01.15
+frontier00001 NIC 2 macaddr 02:00:00:00:30:33 logaddr 03087 location 006.00.15
+frontier00001 NIC 3 macaddr 02:00:00:00:30:32 logaddr 03086 location 006.00.14
+frontier00002 NIC 0 macaddr 02:00:00:00:30:f2 logaddr 03134 location 006.03.14
+frontier00002 NIC 1 macaddr 02:00:00:00:30:f3 logaddr 03135 location 006.03.15
+frontier00002 NIC 2 macaddr 02:00:00:00:30:b3 logaddr 03119 location 006.02.15
+frontier00002 NIC 3 macaddr 02:00:00:00:30:b2 logaddr 03118 location 006.02.14
+frontier00003 NIC 0 macaddr 02:00:00:00:30:62 logaddr 03098 location 006.01.10
+frontier00003 NIC 1 macaddr 02:00:00:00:30:63 logaddr 03099 location 006.01.11
+frontier00003 NIC 2 macaddr 02:00:00:00:30:23 logaddr 03083 location 006.00.11
+frontier00003 NIC 3 macaddr 02:00:00:00:30:22 logaddr 03082 location 006.00.10
+frontier00004 NIC 0 macaddr 02:00:00:00:30:e2 logaddr 03130 location 006.03.10
+frontier00004 NIC 1 macaddr 02:00:00:00:30:e3 logaddr 03131 location 006.03.11
+frontier00004 NIC 2 macaddr 02:00:00:00:30:a3 logaddr 03115 location 006.02.11
+frontier00004 NIC 3 macaddr 02:00:00:00:30:a2 logaddr 03114 location 006.02.10
