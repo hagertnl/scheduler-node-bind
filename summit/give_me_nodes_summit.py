@@ -7,7 +7,7 @@ import random
 
 parser = argparse.ArgumentParser(description="Script to distribute nodes among the nodes allocated to a job by switch group.")
 parser.add_argument('-N', type=int, required=True, action='store', help="Number of nodes to generate binding for.")
-parser.add_argument('--random', action='store_true', help="Generate bindings for random node placement across the network. Overrides force-distribute, if set.")
+parser.add_argument('--randomize', action='store_true', help="Generate bindings for random node placement across the network. Overrides force-distribute, if set.")
 parser.add_argument('--force-distribute', action='store_true', help="If set, always distribute nodes across as many switch groups as possible.")
 # You can often feed the `$LSB_DJOB_HOSTFILE` environment variable directly into this flag
 parser.add_argument('--node-file', type=str, default='./job.nodes', action='store', help="Path to a file containing the list of nodes (batch can be included).")
@@ -98,12 +98,12 @@ assigned_nodes = []
 added_nodes = 0
 
 # Default to packing sequentially into as few groups as possible
-if not (args.force_distribute or args.random):
+if not (args.force_distribute or args.randomize):
     # Then we just take the first args.N nodes in the job
     all_node_names = list(nodes2switches.keys())
     assigned_nodes = all_node_names[0:args.N]
     added_nodes = len(assigned_nodes)
-elif args.force_distribute and not args.random:
+elif args.force_distribute and not args.randomize:
     # Else, distribute the nodes among the switch groups evenly, cyclically (then sort to achieve a block distribution)
     # Each iteration through the for-loop, this increments by 1 to grab the nth node from the node list
     # If a group runs out of nodes, skip it
@@ -116,7 +116,7 @@ elif args.force_distribute and not args.random:
                 added_nodes += 1
         node_index += 1
     assigned_nodes.sort()
-elif args.random:
+elif args.randomize:
     # Else, generate a randomized list of node indexes and grab the first args.N node indexes from that list
     all_node_names = list(nodes2switches.keys())
     random.shuffle(all_node_names)
