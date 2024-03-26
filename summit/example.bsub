@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#BSUB -P <proj>
+#BSUB -W 00:45
+#BSUB -nnodes 4096
+#BSUB -J network_scaling_example
+
+# TODO -- sym-link the give_me_nodes_summit.py script to your current directory if not already present
+
+# TODO -- job setup here
+
+# BEGIN #############################
+
+# Beginning size
+NNODES_ARR=(64 512 4096)
+
+# LSB_DJOB_HOSTFILE is a file containing the node list in the job. Copying it to help debugging later
+# We pass this file to the give_me_nodes_summit.py script
+cp $LSB_DJOB_HOSTFILE ./job.${LSB_JOBID}.nodes
+
+# TODO -- Read this:
+# ERF files already tell `jsrun` how many tasks to run, rank placement, how to bind CPU cores, and GPUs to bind
+# The give_me_nodes_summit.py has flags to customize this, but this defaults to:
+#   6 ranks per node
+#   7 OpenMP threads (28 hw threads) per rank
+#   1 GPU per rank
+# I have not heavily tested the script with other combinations. Inspect the ERF to check for a sensible binding
+
+for NNODES in ${NNODES_ARR[@]}; do
+    echo "Starting NNODES=${NNODES}"
+    nodelist=$(./give_me_nodes_summit.py -N ${NNODES} --erf-file ${LSB_JOBID}.${NNODES}.packed.erf --node-file $LSB_DJOB_HOSTFILE)
+    set -x
+    jsrun --erf_input ${LSB_JOBID}.${NNODES}.packed.erf \
+        --smpiargs="-gpu ..." \
+        stdbuf -i0 -o0 -e0 ${exe}
+    exit_code=$?
+    set +x
+    echo "Completed with exit code: $exit_code"
+
+    # Now run the random ordering problem
+    nodelist=$(./give_me_nodes_summit.py -N ${NNODES} --erf-file ${LSB_JOBID}.${NNODES}.random.erf --node-file $LSB_DJOB_HOSTFILE --random)
+    set -x
+    jsrun --erf_input ${LSB_JOBID}.${NNODES}.random.erf \
+        --smpiargs="-gpu ..." \
+        stdbuf -i0 -o0 -e0 ${exe}
+    exit_code=$?
+    set +x
+    echo "Completed with exit code: $exit_code"
+done
+
+
+
